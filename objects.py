@@ -28,7 +28,7 @@ class FieldCheck:
         self.desired_type = str
         self.allow_null = False
 
-    def is_null(self, value, allow: bool) -> bool:
+    def is_null(self, value) -> bool:
         return type(value) == type(None)
 
     def __call__(self, value):
