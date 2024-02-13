@@ -39,9 +39,14 @@ def field_check_template(row):
 def search_cursor(feature_class: str):
     fields_index = {}
     i = 0
+    print("{")
     for each in ap.ListFields(feature_class):
         fields_index[i] = (each.name, each.type)
+        # This print has a use: it formats the index and field name into dictionary format for easy copy/paste.
+        # Updating this file, you could copy+paste the standard output into the functions dict.
+        print(f"{i}: {each.name}(),")
         i += 1
+    print("}")
     for each in fields_index:
         fields_wrong_type = []
         # The following try-except block is to assess the data type of each field once, rather than once for every row.
