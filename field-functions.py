@@ -1,9 +1,14 @@
 import arcpy
 
+feature_class = r'feature'
+
+list_of_fields = arcpy.ListFields(feature_class)
+
+print(list_of_fields)
+
 def select_nulls_and_calculate(feature_class, field):
     #Goal is to find which fields are null, select those, and do a calculation on them
     for field in arcpy.ListFields(feature_class):
-        print(field)
         #Selects certain features out of the entire feature class based on a WHERE clause
         #Logic that changes which features would pass the filter goes in the WHERE clause, blank clause selects all
         arcpy.SelectLayerByAttribute_management(feature_class,
@@ -20,8 +25,6 @@ def select_nulls_and_calculate(feature_class, field):
                                         code_block=''
                                         )
 
-if __name__ == '__main__':
-    select_nulls_and_calculate(r'full path to feature class', 'field')
 
 
 
