@@ -14,13 +14,14 @@ layer = "AddressPoints_CS"
 
 def SQL_calc(sql_expression, feature_class, field_name, calculation, language="PYTHON3"):
     print(sql_expression)
-
+    print(f'Selecting {field_name} WHERE {sql_expression}...')
     nulls = ap.SelectLayerByAttribute_management(feature_class,
                                                  selection_type='NEW_SELECTION',
                                                  where_clause=sql_expression
                                                  )
-
-    ap.CalculateField_management(nulls, field_name, calculation, language)
+    perform_calc = input(f"Selected {ap.management.GetCount(nulls)} rows.\n Calculation:\n {calculation}\nEdit? Y/N: ")
+    if perform_calc == "Y":
+        ap.CalculateField_management(nulls, field_name, calculation, language)
 
 def nulls_to_empty_string(feature_class):
     fields_index = {}
