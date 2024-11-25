@@ -4,7 +4,6 @@ If they are not string fields, this does not work and nulls remain."""
 
 
 import arcpy as ap
-from objects import *
 
 
 ap.env.workspace = r"C:\Users\kcneinstedt\Downloads\MercerCo_export_Aug2_2024\MercerCo_export_20241010.gdb"
@@ -12,18 +11,24 @@ ap.env.workspace = r"C:\Users\kcneinstedt\Downloads\MercerCo_export_Aug2_2024\Me
 layer = "AddressPoints_CS"
 
 
-def SQL_calc(sql_expression, feature_class, field_name, calculation, language="PYTHON3"):
-    print(sql_expression)
-    print(f'Selecting {field_name} WHERE {sql_expression}...')
+def SQL_calc(sql_expression: str, feature_class: str, field_name: str, calculation: str|int, language="PYTHON3"):
+    arguments_string = f'Selecting {feature_class} WHERE {sql_expression}...'
+    print(f'{arguments_string:-^128}')
     nulls = ap.SelectLayerByAttribute_management(feature_class,
                                                  selection_type='NEW_SELECTION',
                                                  where_clause=sql_expression
                                                  )
-    perform_calc = input(f"Selected {ap.management.GetCount(nulls)} rows.\n Calculation:\n {calculation}\nEdit? Y/N: ")
+    rows_count = ap.management.GetCount(nulls)
+    perform_calc = input(f"Selected {rows_count} rows\n{field_name} calculation:\n{calculation}\nEdit {field_name}? Y/N: ")
     if perform_calc == "Y":
         ap.CalculateField_management(nulls, field_name, calculation, language)
+        print(f"Edited {rows_count} rows")
+    else:
+        print(f"Aborted editing {field_name} field")
 
-def nulls_to_empty_string(feature_class):
+def nulls_to_empty_string(feature_class: str, excluded_fields=None) -> None:
+    if excluded_fields is None:
+        excluded_fields = []
     fields_index = {}
     i = 0
     for each in ap.ListFields(feature_class):
@@ -34,6 +39,8 @@ def nulls_to_empty_string(feature_class):
         i += 1
     for each in fields_index:
         field_name = fields_index[each][0]
+        if field_name in excluded_fields:
+            continue
         sql_expression = f'{field_name} IS NULL'
         calculation = "''"
 
