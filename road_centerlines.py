@@ -8,7 +8,7 @@ class NJ_RCL():
         self.workspace = workspace
         self.layer = layer
 
-    def transform(self):
+    def transform(self) -> None:
         # Method inside which all field calculations happen. Maintain one field at a time for readability.
         try:
             arcpy.CalculateField_management(self.layer, "StreetName", 'Proper($feature.StreetName)','ARCADE')
@@ -28,12 +28,11 @@ class NJ_RCL():
             SQL_calc(f'FromElevat IS NULL', self.layer, "FromElevat", 0)
             SQL_calc(f'LocationNa IS NULL', self.layer, "LocationNa", "")
 
-            SQL_calc(f'ZipCode IS NULL', self.layer, 'ZipCode', calculation='First(Intersects($feature, FeatureSetByName($datastore,"Census_ZIP_Code"))).ZCTA5', language='ARCADE')
         except Exception as e:
             print(e)
 
         finally:
-            nulls_to_empty_string(self.layer)
+            nulls_to_empty_string(self.layer, ['OBJECTID', 'StreetID'])
 
 class BC_RCL():
     # Class inside which all action on the Bucks County Address Point data happens.

@@ -1,4 +1,3 @@
-import arcpy
 from null_sweep import SQL_calc, nulls_to_empty_string
 
 
@@ -8,7 +7,7 @@ class NJ_AP():
         self.workspace = workspace
         self.layer = layer
 
-    def transform(self):
+    def transform(self) -> None:
         # Method inside which all field calculations happen. Maintain one field at a time for readability.
         try:
             SQL_calc(f'StreetName IS NULL', self.layer, 'StreetName', "''")
@@ -25,7 +24,7 @@ class BC_AP():
         self.workspace = workspace
         self.layer = layer
 
-    def transform(self):
+    def transform(self) -> None:
         # Method inside which all field calculations happen on Bucks. Maintain one field at a time for readability.
         try:
             SQL_calc(f'ExternalKey IS NULL', self.layer, 'StreetName', "''")
