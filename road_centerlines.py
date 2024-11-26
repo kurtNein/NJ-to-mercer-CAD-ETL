@@ -1,6 +1,11 @@
 import arcpy
 from null_sweep import SQL_calc, nulls_to_empty_string
 
+# Function must be passed as string because arcpy.CalculateField needs the expression and the code block as strings.
+uuid_expression = """def ID():
+  import uuid
+  return str(uuid.uuid4())
+"""
 
 class NJ_RCL():
     # Class inside which all action on the New Jersey Address Point data happens.
@@ -12,6 +17,7 @@ class NJ_RCL():
         # Method inside which all field calculations happen. Maintain one field at a time for readability.
         try:
             arcpy.CalculateField_management(self.layer, "StreetName", 'Proper($feature.StreetName)','ARCADE')
+            SQL_calc(f'ExternalSt IS NULL', self.layer, 'ExternalSt', 'ID()', language='PYTHON3', code=uuid_expression)
             SQL_calc(f'StreetName IS NULL', self.layer, 'StreetName', "''")
             SQL_calc(f'LeftFromAd IS NULL OR LeftFromAd < 0', self.layer, 'LeftFromAd', 0) # Get node at [0], get LeftToAddr from intersecting line feature?
             SQL_calc(f'LeftToAddr IS NULL OR LeftToAddr < 0', self.layer, "LeftToAddr", 0) # Get node at [-1], get LeftFromAd?

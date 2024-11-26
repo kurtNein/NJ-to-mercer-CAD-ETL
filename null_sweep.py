@@ -1,6 +1,6 @@
-"""This script works for feature classes of variable number of fields. One at a time fields are queried for nulls.
-If nulls are in the field, they are selected. If they are string fields, they are calculated to empty string.
-If they are not string fields, this does not work and nulls remain."""
+"""This module is for helper functions which compute field values.
+
+"""
 
 
 import arcpy as ap
@@ -11,7 +11,7 @@ ap.env.workspace = r"C:\Users\kcneinstedt\Downloads\MercerCo_export_Aug2_2024\Me
 layer = "AddressPoints_CS"
 
 
-def SQL_calc(sql_expression: str, feature_class: str, field_name: str, calculation: str|int, language="PYTHON3"):
+def SQL_calc(sql_expression: str, feature_class: str, field_name: str, calculation: str, language="PYTHON3", code=None):
     arguments_string = f'Selecting {feature_class} WHERE {sql_expression}...'
     print(f'{arguments_string:-^128}')
     nulls = ap.SelectLayerByAttribute_management(feature_class,
@@ -21,10 +21,10 @@ def SQL_calc(sql_expression: str, feature_class: str, field_name: str, calculati
     rows_count = ap.management.GetCount(nulls)
     perform_calc = input(f"Selected {rows_count} rows\n{field_name} calculation:\n{calculation}\nEdit {field_name}? Y/N: ")
     if perform_calc == "Y":
-        ap.CalculateField_management(nulls, field_name, calculation, language)
+        ap.CalculateField_management(nulls, field_name, calculation, language, code)
         print(f"Edited {rows_count} rows")
     else:
-        print(f"Aborted editing {field_name} field")
+        print(f"Aborted editing {field_name} field\n")
 
 def nulls_to_empty_string(feature_class: str, excluded_fields=None) -> None:
     if excluded_fields is None:
@@ -54,4 +54,4 @@ def nulls_to_empty_string(feature_class: str, excluded_fields=None) -> None:
 
 
 if __name__ == '__main__':
-    nulls_to_empty_string(layer)
+    print("This file to be used as an imported module only. Did you mean to run main?")
