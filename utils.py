@@ -1,3 +1,8 @@
+"""
+This file is uses classes from objects.py to apply a class-specific transformation on fields inside an UpdateCursor.
+This is from a previous programming paradigm which has since changed, and this file is deprecated.
+"""
+
 import arcpy as ap
 import regex as re
 from objects import *

@@ -1,4 +1,7 @@
-"""Class definitions of small objects go here to be imported."""
+"""
+This file is for classes which each transform one field in a GIS dataset.
+This is from a previous programming paradigm which has since changed, and this file is deprecated.
+"""
 
 
 class Bool0:

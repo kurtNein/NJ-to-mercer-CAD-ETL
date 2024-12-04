@@ -1,12 +1,12 @@
-"""This module is for helper functions which compute field values.
-
+"""
+This module is for helper functions which compute field values.
 """
 
 
-import arcpy as ap
+import arcpy
 
 
-ap.env.workspace = r"C:\Users\kcneinstedt\Downloads\MercerCo_export_Aug2_2024\MercerCo_export_20241010.gdb"
+arcpy.env.workspace = r"C:\Users\kcneinstedt\Downloads\MercerCo_export_Aug2_2024\MercerCo_export_20241010.gdb"
 
 layer = "AddressPoints_CS"
 
@@ -14,14 +14,14 @@ layer = "AddressPoints_CS"
 def SQL_calc(sql_expression: str, feature_class: str, field_name: str, calculation: str, language="PYTHON3", code=None):
     arguments_string = f'Selecting {feature_class} WHERE {sql_expression}...'
     print(f'{arguments_string:-^128}')
-    nulls = ap.SelectLayerByAttribute_management(feature_class,
-                                                 selection_type='NEW_SELECTION',
-                                                 where_clause=sql_expression
-                                                 )
-    rows_count = ap.management.GetCount(nulls)
+    nulls = arcpy.SelectLayerByAttribute_management(feature_class,
+                                                    selection_type='NEW_SELECTION',
+                                                    where_clause=sql_expression
+                                                    )
+    rows_count = arcpy.management.GetCount(nulls)
     perform_calc = input(f"Selected {rows_count} rows\n{field_name} calculation:\n{calculation}\nEdit {field_name}? Y/N: ")
     if perform_calc == "Y":
-        ap.CalculateField_management(nulls, field_name, calculation, language, code)
+        arcpy.CalculateField_management(nulls, field_name, calculation, language, code)
         print(f"Edited {rows_count} rows")
     else:
         print(f"Aborted editing {field_name} field\n")
@@ -31,7 +31,7 @@ def nulls_to_empty_string(feature_class: str, excluded_fields=None) -> None:
         excluded_fields = []
     fields_index = {}
     i = 0
-    for each in ap.ListFields(feature_class):
+    for each in arcpy.ListFields(feature_class):
         fields_index[i] = (each.name, each.type)
         # This print has a use: it formats the index and field name into dictionary format for easy copy/paste.
         # Updating this file, you could copy+paste the standard output into the functions dict.

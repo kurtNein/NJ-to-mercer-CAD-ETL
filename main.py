@@ -7,7 +7,7 @@ arcpy.env.workspace = r'C:\Users\kcneinstedt\Downloads\CAD Output\AddressPoints_
 nj_ap_layer = r'NJAddressPoints'
 nj_rcl_layer = r'NJ_RCL_NOT_NULL'
 
-# Press the green button in the gutter to run the script.
+# Entry point here
 if __name__ == '__main__':
     a = input(f"Transform address point layer {nj_ap_layer}? Y/N: ")
     if a == "Y":
