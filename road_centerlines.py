@@ -56,3 +56,6 @@ class BC_RCL():
         finally:
             nulls_to_empty_string(self.layer)
 
+
+if __name__ == '__main__':
+    print("This file to be used as an imported module only. Did you mean to run main?")

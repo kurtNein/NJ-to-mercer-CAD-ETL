@@ -1,3 +1,8 @@
+"""
+This file is deprecated and being considered for removal.
+"""
+
+
 import arcpy
 
 feature_class = r'feature'
